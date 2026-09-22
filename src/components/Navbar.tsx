@@ -151,6 +151,17 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/contact"
+              prefetch={true}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`text-3xl sm:text-4xl font-extrabold tracking-tight uppercase transition-colors flex items-center gap-4 ${
+                isActive('/contact') ? 'text-[#FF6B35]' : 'text-gray-900 hover:text-gray-600'
+              }`}
+            >
+              CONTACT US
+              {isActive('/contact') && <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B35]"></span>}
+            </Link>
           </div>
 
           {/* Drawer Footer */}
