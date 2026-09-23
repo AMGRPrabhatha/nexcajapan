@@ -79,14 +79,6 @@ export default async function HomePage() {
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
             <span className="text-gray-400">About  </span>Nexca
           </h2>
-          <div>
-            <Link 
-              href="/about" 
-              className="inline-flex items-center gap-2 bg-orange-100/80 hover:bg-orange-200/80 text-orange-600 font-bold text-sm px-6 py-3 rounded-full transition-all"
-            >
-              Learn More &gt;&gt;&gt;
-            </Link>
-          </div>
         </div>
 
         {/* Paragraphs */}
