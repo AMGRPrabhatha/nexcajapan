@@ -31,7 +31,7 @@ export default function AboutPage() {
         {/* Top Tag Badge & Header */}
         <div className="mb-12">
           <span className="text-orange-500 font-bold text-xs tracking-wider uppercase block mb-3">
-            //OUR SERVICE
+           
           </span>
           <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4">
             Explore <span className="text-orange-500">endless options</span> with our service
@@ -41,23 +41,79 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Bento Grid Layout using local vehicle images */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-12 lg:gap-6 hide-scrollbar">
-          
+        {/* Mobile Slider Layout (Visible up to lg) */}
+        <div className="flex lg:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 hide-scrollbar">
+          {/* Card 1 */}
+          <div className="w-[85vw] flex-shrink-0 snap-center relative rounded-3xl overflow-hidden shadow-sm group h-[280px] bg-gray-900">
+            <img 
+              src="/service-1.png" 
+              alt="Comprehensive Export Support" 
+              className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div className="absolute bottom-4 left-4 right-4 z-10">
+              <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
+                Comprehensive Travel &amp; Import Support
+              </h3>
+              <p className="text-gray-200 text-xs font-medium leading-relaxed">
+                24/7 customer service to assist you before, during, and after your vehicle import.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div className="w-[85vw] flex-shrink-0 snap-center relative rounded-3xl overflow-hidden shadow-sm group h-[280px] bg-gray-900">
+            <img 
+              src="/service-2.png" 
+              alt="Expert Vehicle Advice" 
+              className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div className="absolute bottom-4 left-4 right-4 z-10">
+              <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
+                Expert Vehicle Advice
+              </h3>
+              <p className="text-gray-200 text-xs font-medium">
+                Tips and guides to enhance your Japanese car import experience.
+              </p>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div className="w-[85vw] flex-shrink-0 snap-center relative rounded-3xl overflow-hidden shadow-sm group h-[280px] bg-gray-900">
+            <img 
+              src="/service-3.jpg" 
+              alt="Diverse Destination Ports" 
+              className="w-full h-full object-cover opacity-90"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+            <div className="absolute bottom-4 left-4 right-4 z-10">
+              <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
+                Diverse Destinations
+              </h3>
+              <p className="text-gray-200 text-xs font-medium">
+                Access to a wide range of domestic and international destination ports.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Bento Grid Layout (Visible on lg and above) */}
+        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6">
           {/* Left Column: Large Hero Card */}
-          <div className="lg:col-span-6 min-w-[75vw] snap-center sm:min-w-0 sm:snap-align-none flex-shrink-0">
-            <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[280px] lg:h-[500px] bg-gray-900">
+          <div className="col-span-6">
+            <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[500px] bg-gray-900">
               <img 
                 src="/service-1.png" 
                 alt="Comprehensive Export Support" 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 z-10">
-                <h3 className="text-xl lg:text-2xl font-bold text-white mb-1 lg:mb-2 drop-shadow-md">
+              <div className="absolute bottom-6 left-6 right-6 z-10">
+                <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-md">
                   Comprehensive Travel &amp; Import Support
                 </h3>
-                <p className="text-gray-200 text-xs md:text-sm font-medium leading-relaxed">
+                <p className="text-gray-200 text-sm font-medium leading-relaxed">
                   24/7 customer service to assist you before, during, and after your vehicle import.
                 </p>
               </div>
@@ -65,46 +121,43 @@ export default function AboutPage() {
           </div>
 
           {/* Right Column: 2 Stacked Cards */}
-          <div className="contents lg:block lg:col-span-6">
-            <div className="contents lg:flex lg:flex-col lg:gap-6">
-              {/* Top Card: Expert Vehicle Advice */}
-              <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[280px] lg:h-[238px] bg-gray-900 min-w-[75vw] snap-center sm:min-w-0 sm:snap-align-none flex-shrink-0">
-                <img 
-                  src="/service-2.png" 
-                  alt="Expert Vehicle Advice" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 z-10">
-                  <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
-                    Expert Vehicle Advice
-                  </h3>
-                  <p className="text-gray-200 text-xs md:text-sm font-medium">
-                    Tips and guides to enhance your Japanese car import experience.
-                  </p>
-                </div>
+          <div className="col-span-6 flex flex-col gap-6">
+            {/* Top Card: Expert Vehicle Advice */}
+            <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[238px] bg-gray-900">
+              <img 
+                src="/service-2.png" 
+                alt="Expert Vehicle Advice" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6 z-10">
+                <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
+                  Expert Vehicle Advice
+                </h3>
+                <p className="text-gray-200 text-sm font-medium">
+                  Tips and guides to enhance your Japanese car import experience.
+                </p>
               </div>
+            </div>
 
-              {/* Bottom Card: Diverse Destination Ports */}
-              <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[280px] lg:h-[238px] bg-gray-900 min-w-[75vw] snap-center sm:min-w-0 sm:snap-align-none flex-shrink-0">
-                <img 
-                  src="/service-3.jpg" 
-                  alt="Diverse Destination Ports" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 z-10">
-                  <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
-                    Diverse Destinations
-                  </h3>
-                  <p className="text-gray-200 text-xs md:text-sm font-medium">
-                    Access to a wide range of domestic and international destination ports.
-                  </p>
-                </div>
+            {/* Bottom Card: Diverse Destination Ports */}
+            <div className="relative rounded-3xl overflow-hidden shadow-sm group h-[238px] bg-gray-900">
+              <img 
+                src="/service-3.jpg" 
+                alt="Diverse Destination Ports" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6 z-10">
+                <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">
+                  Diverse Destinations
+                </h3>
+                <p className="text-gray-200 text-sm font-medium">
+                  Access to a wide range of domestic and international destination ports.
+                </p>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -113,10 +166,7 @@ export default function AboutPage() {
         
         {/* Top Centered Pill Badge */}
         <div className="mb-10 flex justify-center">
-          <span className="inline-flex items-center gap-2 border border-gray-200 bg-gray-50 text-gray-800 text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
-            Who we are?
-          </span>
+        
         </div>
 
         {/* Main Headline with Mixed Styling */}
@@ -128,7 +178,7 @@ export default function AboutPage() {
         </h2>
 
         {/* 3 Rounded Studio Vehicle Cards */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 md:gap-6 max-w-5xl mx-auto hide-scrollbar">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:mx-auto sm:px-0 sm:grid sm:grid-cols-3 md:gap-6 max-w-5xl hide-scrollbar">
           {/* Card 1: Mercedes SUV in Garage */}
           <div className="rounded-3xl overflow-hidden shadow-sm h-[240px] sm:h-auto sm:aspect-[4/3] group hover:shadow-md transition-shadow relative bg-gray-100 min-w-[70vw] snap-center sm:min-w-0 sm:snap-align-none flex-shrink-0">
             <img 
@@ -164,16 +214,13 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Badge */}
-          <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-gray-900 uppercase mb-6">
-            <span className="w-2.5 h-2.5 rounded-full bg-black inline-block"></span>
-            SHOWCASE
-          </div>
+          
 
           {/* Main Headline */}
           <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-[1.25] text-gray-900 max-w-6xl mb-16 uppercase">
             DRIVE EXCELLENCE WITH NEXCA MOTORS: YOUR TRUSTED GATEWAY TO JAPANESE AUTOMOTIVE ENGINEERING, WHERE{" "}
             <span className="text-gray-400 font-medium">
-              EVERY VEHICLE DELIVERS UNCOMPROMISED QUALITY AND PERFORMANCE. ———
+              EVERY VEHICLE DELIVERS UNCOMPROMISED QUALITY AND PERFORMANCE.
             </span>
           </h2>
 

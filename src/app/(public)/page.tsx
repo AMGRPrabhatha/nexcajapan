@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import FeaturedVehiclesClient from '@/components/FeaturedVehiclesClient';
 import Link from 'next/link';
-
+import Image from 'next/image';
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
@@ -107,10 +107,12 @@ export default async function HomePage() {
           {/* Card 01 */}
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow min-w-[85vw] sm:min-w-0 snap-center md:snap-align-none">
             <div className="relative rounded-2xl overflow-hidden aspect-[16/9] mb-6 bg-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=1200&q=80" 
+              <Image 
+                src="/gtr.webp" 
                 alt="Japanese Car Sourcing" 
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
               <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-gray-900 text-3xl font-extrabold px-3 py-1 rounded-xl shadow-sm">
                 01
@@ -204,7 +206,7 @@ export default async function HomePage() {
           {/* Section Heading & Subheading */}
           <div className="text-center max-w-4xl mx-auto mb-16">
             <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4 uppercase">
-              What You Can't Find At Your <br className="hidden md:block" /> Local Dealer, Can Be Found Here ☻
+              What You Can't Find At Your <br className="hidden md:block" /> Local Dealer, Can Be Found Here
             </h2>
             <p className="text-gray-600 text-base md:text-lg font-medium flex items-center justify-center gap-2">
               Premium Imports In The <span className="bg-black text-white px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">World</span>
@@ -302,10 +304,12 @@ export default async function HomePage() {
               
               {/* BMW Card */}
               <Link href="/shop?make=BMW" className="group relative h-[360px] md:h-[420px] rounded-2xl overflow-hidden block bg-gray-900 min-w-[85vw] snap-center sm:min-w-0 sm:snap-align-none">
-                <img 
-                  src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80" 
+                <Image 
+                  src="/bmw_car.webp" 
                   alt="BMW" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                 
@@ -328,10 +332,12 @@ export default async function HomePage() {
 
               {/* Toyota Card */}
               <Link href="/shop?make=Toyota" className="group relative h-[360px] md:h-[420px] rounded-2xl overflow-hidden block bg-gray-900 min-w-[85vw] snap-center sm:min-w-0 sm:snap-align-none">
-                <img 
-                  src="https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=1200&q=80" 
+                <Image 
+                  src="/toyota.webp" 
                   alt="Toyota" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                 
@@ -359,10 +365,12 @@ export default async function HomePage() {
               
               {/* Mercedes-Benz Card */}
               <Link href="/shop?make=Mercedes" className="group relative h-[320px] md:h-[360px] rounded-2xl overflow-hidden block bg-gray-900 min-w-[85vw] snap-center sm:min-w-0 sm:snap-align-none">
-                <img 
-                  src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1000&q=80" 
+                <Image 
+                  src="/benz.webp" 
                   alt="Mercedes - Benz" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                 
@@ -385,10 +393,12 @@ export default async function HomePage() {
 
               {/* Lexus Card */}
               <Link href="/shop?make=Lexus" className="group relative h-[320px] md:h-[360px] rounded-2xl overflow-hidden block bg-gray-900 min-w-[85vw] snap-center sm:min-w-0 sm:snap-align-none">
-                <img 
-                  src="https://images.unsplash.com/photo-1621007947382-bb3c3994e3fd?auto=format&fit=crop&w=1000&q=80" 
+                <Image 
+                  src="/lexus.webp" 
                   alt="Lexus" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                 
@@ -411,10 +421,12 @@ export default async function HomePage() {
 
               {/* Ford Card */}
               <Link href="/shop?make=Ford" className="group relative h-[320px] md:h-[360px] rounded-2xl overflow-hidden block bg-gray-900 min-w-[85vw] snap-center sm:min-w-0 sm:snap-align-none">
-                <img 
-                  src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=80" 
+                <Image 
+                  src="/ford.webp" 
                   alt="Ford" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
                 
