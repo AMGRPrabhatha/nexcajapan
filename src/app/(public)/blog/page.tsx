@@ -122,7 +122,7 @@ export default function BlogPage() {
           <div className="absolute -left-16 -bottom-16 w-80 h-80 bg-blue-500/[0.06] rounded-full blur-3xl pointer-events-none" />
 
           <div className="max-w-2xl relative z-10">
-            <span className="text-[#FF6B35] text-xs font-bold uppercase tracking-wider mb-2.5 block">
+            <span className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2.5 block">
               // JAPAN CAR SOURCING
             </span>
             <h3 className="text-2xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-4 leading-tight">

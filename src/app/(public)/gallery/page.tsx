@@ -52,7 +52,7 @@ export default async function GalleryPage() {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         {/* Section Intro */}
         <div className="mb-10 text-center sm:text-left">
-          <span className="text-[#FF6B35] font-bold text-xs tracking-wider uppercase block mb-2">
+          <span className="text-gray-400 font-bold text-xs tracking-wider uppercase block mb-2">
             RECENT INSPECTIONS &amp; DELIVERIES
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">

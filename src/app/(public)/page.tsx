@@ -77,7 +77,7 @@ export default async function HomePage() {
         {/* Heading & Learn More Row */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-            <span className="text-orange-500">About  </span>Nexca
+            <span className="text-gray-400">About  </span>Nexca
           </h2>
           <div>
             <Link 

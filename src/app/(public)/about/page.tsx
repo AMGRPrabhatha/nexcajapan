@@ -30,11 +30,11 @@ export default function AboutPage() {
         
         {/* Top Tag Badge & Header */}
         <div className="mb-12">
-          <span className="text-orange-500 font-bold text-xs tracking-wider uppercase block mb-3">
+          <span className="text-gray-400 font-bold text-xs tracking-wider uppercase block mb-3">
            
           </span>
           <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight mb-4">
-            Explore <span className="text-orange-500">endless options</span> with our service
+            Explore <span className="text-gray-400">endless options</span> with our service
           </h2>
           <p className="text-gray-500 text-sm md:text-base max-w-2xl leading-relaxed">
             Discover a myriad of choices available through our service, offering limitless possibilities for your exploration and enjoyment.
