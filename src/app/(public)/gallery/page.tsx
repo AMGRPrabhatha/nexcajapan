@@ -14,10 +14,10 @@ export default async function GalleryPage() {
       .order('created_at', { ascending: false });
 
     const timeoutPromise = new Promise<{ data: any[] | null; error: any }>((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), 50)
+      setTimeout(() => reject(new Error('timeout')), 5000)
     );
 
-    const res = await Promise.race([fetchPromise, timeoutPromise]);
+    const res: any = await Promise.race([fetchPromise, timeoutPromise]);
     if (res?.data) {
       galleryItems = res.data;
     }
@@ -48,8 +48,8 @@ export default async function GalleryPage() {
         </div>
       </div>
 
-      {/* Gallery Grid Section */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+      {/* Gallery Grid Section (Matching Blog layout max-w-[1400px] and px-4 sm:px-6 lg:px-8) */}
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* Section Intro */}
         <div className="mb-10 text-center sm:text-left">
           <span className="text-gray-400 font-bold text-xs tracking-wider uppercase block mb-2">
