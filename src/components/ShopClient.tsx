@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ShopClient({ initialVehicles }: { initialVehicles: any[] }) {
   const [vehicles, setVehicles] = useState<any[]>(initialVehicles || []);
+  const [loading, setLoading] = useState(initialVehicles.length === 0);
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -48,6 +49,7 @@ export default function ShopClient({ initialVehicles }: { initialVehicles: any[]
         if (combined.length > 0) {
           setVehicles(combined);
         }
+        setLoading(false);
       }
     };
 
@@ -115,7 +117,9 @@ export default function ShopClient({ initialVehicles }: { initialVehicles: any[]
             >
               <Filter size={16} /> Show Filters
             </button>
-            <span className="text-sm text-gray-500 hidden sm:inline">{filteredVehicles.length} vehicles</span>
+            <span className="text-sm text-gray-500 hidden sm:inline">
+              {loading && filteredVehicles.length === 0 ? 'Loading inventory...' : `${filteredVehicles.length} vehicles`}
+            </span>
           </div>
           
           <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
@@ -156,15 +160,30 @@ export default function ShopClient({ initialVehicles }: { initialVehicles: any[]
 
       {/* Main Grid */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-6 md:gap-y-10">
-          {filteredVehicles.map(vehicle => (
-            <VehicleCard key={vehicle.id} vehicle={vehicle} />
-          ))}
-        </div>
-        {filteredVehicles.length === 0 && (
-          <div className="text-center py-20 text-gray-500">
-            No vehicles match your current filters.
+        {loading && filteredVehicles.length === 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-6 md:gap-y-10">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-200/80 p-3 sm:p-5 flex flex-col h-full animate-pulse shadow-xs">
+                <div className="aspect-[4/3] bg-gray-100 rounded-xl mb-4" />
+                <div className="h-5 bg-gray-200 rounded-md w-3/4 mb-2" />
+                <div className="h-3.5 bg-gray-100 rounded-md w-1/2 mb-5" />
+                <div className="h-6 bg-gray-100 rounded-lg w-full mt-auto" />
+              </div>
+            ))}
           </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 md:gap-x-6 md:gap-y-10">
+              {filteredVehicles.map(vehicle => (
+                <VehicleCard key={vehicle.id} vehicle={vehicle} />
+              ))}
+            </div>
+            {filteredVehicles.length === 0 && (
+              <div className="text-center py-20 text-gray-500 font-medium">
+                No vehicles match your current filters.
+              </div>
+            )}
+          </>
         )}
       </div>
 

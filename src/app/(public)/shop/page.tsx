@@ -15,15 +15,15 @@ export default async function ShopPage() {
       .order('created_at', { ascending: false });
 
     const timeoutPromise = new Promise<{ data: any[] | null; error: any }>((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), 50)
+      setTimeout(() => reject(new Error('timeout')), 5000)
     );
 
-    const res = await Promise.race([fetchPromise, timeoutPromise]);
+    const res: any = await Promise.race([fetchPromise, timeoutPromise]);
     if (res?.data) {
       vehicles = res.data;
     }
   } catch (err) {
-    console.warn("Shop page: Supabase fetch timed out or offline, falling back gracefully.");
+    console.warn("Shop page: Supabase server fetch error or offline, client will fallback:", err);
   }
 
   return (

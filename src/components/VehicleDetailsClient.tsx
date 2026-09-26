@@ -2,7 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-import { Check, Info, Phone, ArrowLeft, Calendar, Settings, Gauge, Fuel, Mail } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  ChevronLeft, 
+  ChevronRight, 
+  Calendar, 
+  Gauge, 
+  Settings, 
+  Fuel, 
+  Palette, 
+  Hash, 
+  Phone, 
+  Mail, 
+  ShieldCheck, 
+  Truck, 
+  FileText, 
+  Share2, 
+  Check, 
+  Sparkles,
+  Camera
+} from 'lucide-react';
 import Link from 'next/link';
 
 export default function VehicleDetailsClient({ 
@@ -14,7 +33,8 @@ export default function VehicleDetailsClient({
 }) {
   const [vehicle, setVehicle] = useState<any>(initialVehicle);
   const [loading, setLoading] = useState(!initialVehicle);
-  const [activeImage, setActiveImage] = useState<string>('');
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [copied, setCopied] = useState(false);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -59,244 +79,395 @@ export default function VehicleDetailsClient({
 
   if (loading) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 bg-[#f9f9f9]">
-        <div className="w-12 h-12 border-4 border-[#FF4B33]/20 border-t-[#FF4B33] rounded-full animate-spin mb-4"></div>
-        <p className="text-gray-500 font-semibold tracking-wide">Loading vehicle details...</p>
+      <div className="min-h-[75vh] flex flex-col items-center justify-center p-8 bg-[#FAFAFA]">
+        <div className="w-10 h-10 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin mb-4"></div>
+        <p className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">Loading Vehicle Data...</p>
       </div>
     );
   }
 
   if (!vehicle) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 text-center bg-[#f9f9f9]">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Vehicle Not Found</h2>
-        <p className="text-gray-500 font-medium mb-8 max-w-md mx-auto">The vehicle listing you are looking for is unavailable, sold, or has been removed from our inventory.</p>
+      <div className="min-h-[75vh] flex flex-col items-center justify-center p-8 text-center bg-[#FAFAFA]">
+        <span className="text-xs uppercase tracking-widest font-bold text-neutral-400 mb-2">Inventory Notice</span>
+        <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3 tracking-tight">Vehicle Not Available</h2>
+        <p className="text-neutral-500 text-sm max-w-sm mb-8 leading-relaxed">This unit has been archived, exported, or is temporarily undergoing maintenance.</p>
         <Link 
           href="/shop" 
-          className="bg-gray-900 hover:bg-gray-800 text-white font-bold px-8 py-3.5 rounded-xl shadow transition-all hover:-translate-y-1"
+          className="inline-flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold tracking-wider uppercase px-6 py-3 rounded-full transition-all duration-200"
         >
-          Browse Inventory
+          <ArrowLeft size={14} /> Return to Inventory
         </Link>
       </div>
     );
   }
 
-  const images = vehicle.vehicle_images?.sort((a: any, b: any) => (b.is_main ? 1 : 0) - (a.is_main ? 1 : 0)) || [];
-  const mainImage = images.length > 0 ? images[0].image_url : '/Inventory.webp';
-  const displayImage = activeImage || mainImage;
+  const rawImages = vehicle.vehicle_images?.sort((a: any, b: any) => (b.is_main ? 1 : 0) - (a.is_main ? 1 : 0)) || [];
+  const images = rawImages.length > 0 ? rawImages : [{ image_url: '/Inventory.webp', is_main: true }];
+  const currentImage = images[activeIndex]?.image_url || '/Inventory.webp';
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(price || 0);
+  const handlePrevImage = () => {
+    setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const whatsappMessage = encodeURIComponent(`Hi, I am interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} (ID: ${vehicle.id}). Is it still available?`);
+  const handleNextImage = () => {
+    setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleShare = () => {
+    if (typeof window !== 'undefined') {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const whatsappMessage = encodeURIComponent(
+    `Hello Nexca Motors! I am inquiring about the ${vehicle.year || ''} ${vehicle.make || ''} ${vehicle.model || ''} (Chassis: ${vehicle.chassis_no || 'N/A'}). Could you provide the export pricing and shipping schedule?`
+  );
   const whatsappUrl = `https://wa.me/818051662345?text=${whatsappMessage}`;
-  const emailUrl = `mailto:nexcainfo@gmail.com?subject=Inquiry: ${vehicle.year} ${vehicle.make} ${vehicle.model}&body=Hi,%0D%0A%0D%0AI am interested in the ${vehicle.year} ${vehicle.make} ${vehicle.model} (ID: ${vehicle.id}). Is it still available?`;
+  const emailUrl = `mailto:nexcainfo@gmail.com?subject=Inquiry: ${vehicle.year || ''} ${vehicle.make || ''} ${vehicle.model || ''} [Chassis: ${vehicle.chassis_no || ''}]&body=Hi Nexca Team,%0D%0A%0D%0AI would like to receive further details and quotation for the ${vehicle.title || vehicle.model} (Chassis No: ${vehicle.chassis_no || ''}).%0D%0A%0D%0AThank you.`;
 
   return (
-    <div className="bg-[#f8f9fa] min-h-screen pb-20 pt-24 sm:pt-28 lg:pt-32">
-      {/* Container */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#F8F9FA] min-h-screen text-neutral-900 antialiased pt-24 sm:pt-28 pb-24">
+      <div className="max-w-[1220px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Breadcrumb & Back Button */}
-        <div className="mb-6 lg:mb-8">
-          <Link href="/shop" className="inline-flex items-center text-[13px] sm:text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors uppercase tracking-wider">
-            <ArrowLeft size={16} strokeWidth={2.5} className="mr-2" /> Back to Inventory
+        {/* Navigation Bar / Breadcrumb */}
+        <div className="flex items-center justify-between py-4 mb-3 border-b border-neutral-200/70">
+          <Link 
+            href="/shop" 
+            className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-500 hover:text-neutral-900 transition-colors"
+          >
+            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+            <span>Inventory</span>
+            <span className="text-neutral-300">/</span>
+            <span className="text-neutral-900 font-bold">{vehicle.make}</span>
           </Link>
+
+          <button 
+            onClick={handleShare}
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-500 hover:text-neutral-900 bg-white/80 hover:bg-white backdrop-blur-md px-3 py-1.5 rounded-full border border-neutral-200/80 shadow-xs transition-all"
+            title="Copy link"
+          >
+            {copied ? <Check size={13} className="text-emerald-600" /> : <Share2 size={13} />}
+            <span>{copied ? 'Copied' : 'Share'}</span>
+          </button>
         </div>
 
-        {/* Title Section */}
-        <div className="mb-8 lg:mb-10">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 lg:gap-8">
-            <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-2">
-                {vehicle.make} <span className="text-gray-400">{vehicle.model}</span>
-              </h1>
-              <div className="flex items-center gap-3 text-sm sm:text-base font-semibold text-gray-600">
-                <span className="bg-gray-200 text-gray-800 px-2.5 py-0.5 rounded-md">{vehicle.year}</span>
-                <span>{vehicle.title}</span>
-              </div>
-            </div>
-            <div className="text-left lg:text-right border-t lg:border-t-0 pt-4 lg:pt-0 border-gray-200">
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#FF4B33] tracking-tight">
-                {formatPrice(vehicle.price_usd)}
-              </div>
-              <p className="text-[11px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">FOB Price (USD)</p>
-            </div>
+        {/* Hero Title Block */}
+        <div className="mb-6 sm:mb-8 pt-2">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Verified Stock
+            </span>
+            {vehicle.chassis_no && (
+              <span className="text-[11px] font-mono text-neutral-500 bg-white/80 px-2.5 py-0.5 rounded-md border border-neutral-200/70">
+                VIN: {vehicle.chassis_no}
+              </span>
+            )}
           </div>
+          
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-neutral-900 leading-tight">
+            {vehicle.year ? `${vehicle.year} ` : ''}{vehicle.title || `${vehicle.make} ${vehicle.model}`}
+          </h1>
         </div>
 
-        {/* Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12 items-start">
+        {/* Main Grid: Gallery & Details (Left) + Concierge Card & Specs (Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           
-          {/* Main Content (Left: 2 columns wide) */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* LEFT COLUMN: Gallery, Quick Specs Strip, Overview */}
+          <div className="lg:col-span-8 space-y-6">
             
-            {/* Image Gallery */}
-            <div className="bg-white rounded-[24px] sm:rounded-[32px] p-2 sm:p-3 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
-              <div className="aspect-[4/3] sm:aspect-[16/10] relative rounded-[16px] sm:rounded-[24px] overflow-hidden bg-gray-100 mb-2 sm:mb-3 group">
+            {/* Gallery Frame */}
+            <div className="relative bg-neutral-900 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.08)]">
+              {/* Main Image Stage */}
+              <div className="relative aspect-[16/10] sm:aspect-[16/9.5] w-full bg-neutral-900 overflow-hidden select-none">
                 <img 
-                  src={displayImage} 
-                  alt={`${vehicle.make} ${vehicle.model}`}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]" 
+                  src={currentImage} 
+                  alt={vehicle.title || 'Vehicle photo'} 
+                  className="w-full h-full object-cover transition-opacity duration-300"
                   onError={(e) => {
                     (e.target as HTMLElement).setAttribute('src', '/Inventory.webp');
                   }}
                 />
-              </div>
-              {images.length > 1 && (
-                <div className="grid grid-cols-5 gap-2 sm:gap-3 px-1 pb-1">
-                  {images.map((img: any, i: number) => (
+
+                {/* Subtle dark gradient overlay on bottom for readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
+
+                {/* Counter Badge */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 bg-neutral-950/75 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1.5 rounded-full border border-white/10 shadow-sm">
+                  <Camera size={13} className="text-neutral-300" />
+                  <span>{activeIndex + 1} / {images.length}</span>
+                </div>
+
+                {/* Navigation Arrows (Show only if multiple images) */}
+                {images.length > 1 && (
+                  <>
                     <button 
-                      key={i} 
-                      onClick={() => setActiveImage(img.image_url)}
-                      className={`aspect-[4/3] relative rounded-lg sm:rounded-xl overflow-hidden hover:opacity-90 transition-all cursor-pointer border-2 ${displayImage === img.image_url ? 'border-[#FF4B33] shadow-md opacity-100' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                      onClick={handlePrevImage}
+                      className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-neutral-900 flex items-center justify-center shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                      aria-label="Previous image"
                     >
-                      <img src={img.image_url} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                      <ChevronLeft size={20} strokeWidth={2.5} />
                     </button>
-                  ))}
+                    <button 
+                      onClick={handleNextImage}
+                      className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-neutral-900 flex items-center justify-center shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                      aria-label="Next image"
+                    >
+                      <ChevronRight size={20} strokeWidth={2.5} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnail Strip */}
+              {images.length > 1 && (
+                <div className="p-3 bg-neutral-950/90 backdrop-blur-md border-t border-white/10 flex items-center gap-2 overflow-x-auto">
+                  {images.map((img: any, i: number) => {
+                    const isSelected = activeIndex === i;
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => setActiveIndex(i)}
+                        className={`relative flex-shrink-0 w-16 sm:w-20 aspect-[16/10] rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                          isSelected 
+                            ? 'border-white opacity-100 ring-2 ring-white/30 scale-102' 
+                            : 'border-transparent opacity-50 hover:opacity-90'
+                        }`}
+                      >
+                        <img 
+                          src={img.image_url} 
+                          alt={`Thumbnail ${i + 1}`} 
+                          className="w-full h-full object-cover" 
+                        />
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
 
-            {/* Quick Specs Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              <div className="bg-white p-4 sm:p-5 rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center text-center group hover:border-gray-200 transition-colors">
-                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-[#FF4B33]/10 transition-colors">
-                  <Calendar className="text-gray-400 group-hover:text-[#FF4B33] transition-colors" size={20} strokeWidth={2} />
+            {/* Modern Clean Specs Ribbon (Liquid Glass Minimal Look) */}
+            <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4 sm:p-5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-neutral-100">
+                
+                {/* Year */}
+                <div className="flex items-center gap-3 pt-2 sm:pt-0 sm:px-2 first:pt-0">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-100/80 flex items-center justify-center text-neutral-600 flex-shrink-0">
+                    <Calendar size={18} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Year</span>
+                    <span className="text-sm sm:text-base font-bold text-neutral-900">{vehicle.year || '—'}</span>
+                  </div>
                 </div>
-                <span className="text-[10px] sm:text-[11px] text-gray-500 font-bold uppercase tracking-widest mb-1">Year</span>
-                <span className="text-[15px] sm:text-[16px] font-extrabold text-gray-900">{vehicle.year}</span>
-              </div>
-              <div className="bg-white p-4 sm:p-5 rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center text-center group hover:border-gray-200 transition-colors">
-                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-[#FF4B33]/10 transition-colors">
-                  <Gauge className="text-gray-400 group-hover:text-[#FF4B33] transition-colors" size={20} strokeWidth={2} />
+
+                {/* Mileage */}
+                <div className="flex items-center gap-3 pt-2 sm:pt-0 sm:px-4">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-100/80 flex items-center justify-center text-neutral-600 flex-shrink-0">
+                    <Gauge size={18} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Odometer</span>
+                    <span className="text-sm sm:text-base font-bold text-neutral-900">
+                      {vehicle.mileage ? `${vehicle.mileage.toLocaleString()} km` : '—'}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[10px] sm:text-[11px] text-gray-500 font-bold uppercase tracking-widest mb-1">Mileage</span>
-                <span className="text-[15px] sm:text-[16px] font-extrabold text-gray-900">{(vehicle.mileage || 0).toLocaleString()} km</span>
-              </div>
-              <div className="bg-white p-4 sm:p-5 rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center text-center group hover:border-gray-200 transition-colors">
-                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-[#FF4B33]/10 transition-colors">
-                  <Settings className="text-gray-400 group-hover:text-[#FF4B33] transition-colors" size={20} strokeWidth={2} />
+
+                {/* Transmission */}
+                <div className="flex items-center gap-3 pt-2 sm:pt-0 sm:px-4">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-100/80 flex items-center justify-center text-neutral-600 flex-shrink-0">
+                    <Settings size={18} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Gearbox</span>
+                    <span className="text-sm sm:text-base font-bold text-neutral-900 capitalize">{vehicle.transmission || '—'}</span>
+                  </div>
                 </div>
-                <span className="text-[10px] sm:text-[11px] text-gray-500 font-bold uppercase tracking-widest mb-1">Trans</span>
-                <span className="text-[15px] sm:text-[16px] font-extrabold text-gray-900 capitalize">{vehicle.transmission}</span>
-              </div>
-              <div className="bg-white p-4 sm:p-5 rounded-[20px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center text-center group hover:border-gray-200 transition-colors">
-                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-[#FF4B33]/10 transition-colors">
-                  <Fuel className="text-gray-400 group-hover:text-[#FF4B33] transition-colors" size={20} strokeWidth={2} />
+
+                {/* Fuel */}
+                <div className="flex items-center gap-3 pt-2 sm:pt-0 sm:px-4">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-100/80 flex items-center justify-center text-neutral-600 flex-shrink-0">
+                    <Fuel size={18} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">Fuel</span>
+                    <span className="text-sm sm:text-base font-bold text-neutral-900 capitalize">{vehicle.fuel_type || '—'}</span>
+                  </div>
                 </div>
-                <span className="text-[10px] sm:text-[11px] text-gray-500 font-bold uppercase tracking-widest mb-1">Fuel</span>
-                <span className="text-[15px] sm:text-[16px] font-extrabold text-gray-900 capitalize">{vehicle.fuel_type}</span>
+
               </div>
             </div>
 
-            {/* Description */}
-            <div className="bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 lg:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.02)] border border-gray-100">
-              <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-6 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-[#FF4B33]/10 flex items-center justify-center">
-                  <Info size={18} strokeWidth={2.5} className="text-[#FF4B33]" />
+            {/* Vehicle Overview / Editorial Notes */}
+            <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-6 sm:p-8">
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-neutral-100">
+                <div className="flex items-center gap-2">
+                  <FileText size={18} className="text-neutral-500" />
+                  <h2 className="text-base font-bold tracking-tight text-neutral-900">
+                    Vehicle Overview & Condition
+                  </h2>
+                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
+                  Dealer Notes
                 </span>
-                Vehicle Overview
-              </h2>
-              <div className="text-gray-600 leading-relaxed font-medium">
+              </div>
+
+              <div className="text-neutral-700 font-normal leading-relaxed text-sm sm:text-[15px]">
                 {vehicle.description ? (
-                  <p className="whitespace-pre-wrap text-[15px] sm:text-[16px]">{vehicle.description}</p>
+                  <p className="whitespace-pre-line">{vehicle.description}</p>
                 ) : (
-                  <p className="italic text-gray-400">No detailed description provided by the dealer.</p>
+                  <p className="text-neutral-400 italic">No additional dealer notes provided for this vehicle listing.</p>
                 )}
               </div>
-            </div>
-            
-          </div>
 
-          {/* Sticky Sidebar (Right: 1 column wide) */}
-          <div className="lg:sticky lg:top-32 space-y-6 sm:space-y-8">
-            
-            {/* Contact Action Card */}
-            <div className="bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 shadow-[0_12px_40px_rgb(0,0,0,0.08)] border border-gray-100/50 relative overflow-hidden">
-              {/* Decorative background blob */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF4B33]/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+              {/* Service & Export Assurance */}
+              <div className="mt-8 pt-6 border-t border-neutral-100 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex items-start gap-2.5">
+                  <ShieldCheck size={18} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-neutral-900">Authentic JDM History</h4>
+                    <p className="text-[11px] text-neutral-500 mt-0.5">Verified chassis inspection prior to export loading.</p>
+                  </div>
+                </div>
 
-              <h3 className="text-xl font-extrabold text-gray-900 mb-2 relative z-10">Interested in this vehicle?</h3>
-              <p className="text-[14px] text-gray-500 mb-8 font-medium leading-relaxed relative z-10">Contact our sales team directly for the best shipping quote and purchasing options.</p>
-              
-              <a 
-                href={whatsappUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2.5 transition-all duration-300 mb-3 shadow-[0_4px_14px_rgba(37,211,102,0.3)] hover:shadow-[0_6px_20px_rgba(37,211,102,0.4)] hover:-translate-y-1 relative z-10 text-[15px]"
-              >
-                <Phone size={20} strokeWidth={2.5} />
-                Inquire via WhatsApp
-              </a>
-              
-              <a 
-                href={emailUrl}
-                className="w-full bg-gray-900 text-white hover:bg-black font-bold py-4 px-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2.5 transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_14px_rgba(0,0,0,0.15)] relative z-10 text-[15px]"
-              >
-                <Mail size={20} strokeWidth={2.5} />
-                Send Email Inquiry
-              </a>
-            </div>
+                <div className="flex items-start gap-2.5">
+                  <Truck size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-neutral-900">Global Port Transit</h4>
+                    <p className="text-[11px] text-neutral-500 mt-0.5">Direct Ro-Ro & container shipping from Nagoya/Yokohama.</p>
+                  </div>
+                </div>
 
-            {/* Specifications Details */}
-            <div className="bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] border border-gray-100">
-              <h3 className="text-[14px] font-extrabold text-gray-900 mb-6 uppercase tracking-widest flex items-center gap-2">
-                <Settings size={16} className="text-gray-400" />
-                Technical Specs
-              </h3>
-              <div className="space-y-1">
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Chassis Number</span>
-                  <span className="text-gray-900 font-bold text-[14px]">{vehicle.chassis_no || '-'}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Make</span>
-                  <span className="text-gray-900 font-bold text-[14px]">{vehicle.make}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Model</span>
-                  <span className="text-gray-900 font-bold text-[14px]">{vehicle.model}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Model Code</span>
-                  <span className="text-gray-900 font-bold text-[14px]">{vehicle.model_code || '-'}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Engine Size</span>
-                  <span className="text-gray-900 font-bold text-[14px]">{vehicle.engine_size ? `${vehicle.engine_size} cc` : '-'}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Drive</span>
-                  <span className="text-gray-900 font-bold text-[14px] capitalize">{vehicle.drive || '-'}</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-50">
-                  <span className="text-gray-500 text-[13px] font-semibold">Steering</span>
-                  <span className="text-gray-900 font-bold text-[14px] capitalize">{vehicle.steering || '-'}</span>
-                </div>
-                <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-500 text-[13px] font-semibold">Location</span>
-                  <span className="text-gray-900 font-bold text-[14px] capitalize">{vehicle.location || 'Japan'}</span>
+                <div className="flex items-start gap-2.5">
+                  <Sparkles size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-neutral-900">Export Documentation</h4>
+                    <p className="text-[11px] text-neutral-500 mt-0.5">Full export certificates, Bill of Lading, and customs papers.</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Eligible Destinations */}
-            {vehicle.target_countries && vehicle.target_countries.length > 0 && (
-               <div className="bg-white rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] border border-gray-100">
-                 <h3 className="text-[13px] font-extrabold text-gray-500 uppercase tracking-widest mb-5">Eligible For Shipping</h3>
-                 <div className="flex flex-wrap gap-2.5">
-                   {vehicle.target_countries.map((country: string, idx: number) => (
-                     <span key={idx} className="bg-green-50 text-green-700 text-[13px] font-bold px-3.5 py-2 rounded-xl flex items-center gap-2 border border-green-100/50">
-                       <Check size={16} strokeWidth={3} className="text-green-600" /> {country}
-                     </span>
-                   ))}
-                 </div>
-               </div>
-            )}
+          </div>
+
+          {/* RIGHT COLUMN: Sticky Concierge Card & Technical Specs */}
+          <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            
+            {/* Concierge & Purchase Action Card */}
+            <div className="bg-white/90 backdrop-blur-2xl border border-white/80 shadow-[0_12px_40px_rgba(0,0,0,0.06)] rounded-2xl sm:rounded-3xl p-6 sm:p-7 relative overflow-hidden">
+              <div className="mb-5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-[#FF4B33]">Export Concierge</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 tracking-tight">Request CIF / FOB Quote</h3>
+                <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
+                  Connect with our Japanese export agents for direct port-to-port quotations, schedule, and live walkaround video.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-2.5 pt-1">
+                <a 
+                  href={whatsappUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all duration-200 shadow-[0_4px_14px_rgba(37,211,102,0.25)] hover:shadow-[0_6px_18px_rgba(37,211,102,0.35)] text-sm cursor-pointer"
+                >
+                  <Phone size={17} strokeWidth={2.2} />
+                  <span>Inquire on WhatsApp</span>
+                </a>
+
+                <a 
+                  href={emailUrl}
+                  className="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all duration-200 text-sm cursor-pointer"
+                >
+                  <Mail size={17} strokeWidth={2.2} />
+                  <span>Send Direct Email</span>
+                </a>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-400">
+                <span>Direct Hotline:</span>
+                <a href="tel:+818051662345" className="font-mono font-semibold text-neutral-700 hover:text-neutral-950">
+                  +81 80-5166-2345
+                </a>
+              </div>
+            </div>
+
+            {/* Structured Technical Specs Sheet */}
+            <div className="bg-white/80 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-6 sm:p-7">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4 pb-2 border-b border-neutral-100">
+                Technical Specifications
+              </h3>
+
+              <div className="space-y-2.5 text-xs">
+                
+                {/* Chassis */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium flex items-center gap-1.5">
+                    <Hash size={13} className="text-neutral-400" /> Chassis No
+                  </span>
+                  <span className="font-mono font-bold text-neutral-900">{vehicle.chassis_no || '—'}</span>
+                </div>
+
+                {/* Make */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium">Make</span>
+                  <span className="font-semibold text-neutral-900">{vehicle.make || '—'}</span>
+                </div>
+
+                {/* Model */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium">Model</span>
+                  <span className="font-semibold text-neutral-900">{vehicle.model || '—'}</span>
+                </div>
+
+                {/* Year */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium">Model Year</span>
+                  <span className="font-semibold text-neutral-900">{vehicle.year || '—'}</span>
+                </div>
+
+                {/* Color */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium flex items-center gap-1.5">
+                    <Palette size={13} className="text-neutral-400" /> Exterior Color
+                  </span>
+                  <span className="font-semibold text-neutral-900 capitalize">{vehicle.color || '—'}</span>
+                </div>
+
+                {/* Mileage */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium">Recorded Mileage</span>
+                  <span className="font-semibold text-neutral-900">
+                    {vehicle.mileage ? `${vehicle.mileage.toLocaleString()} km` : '—'}
+                  </span>
+                </div>
+
+                {/* Transmission */}
+                <div className="flex items-center justify-between py-1.5 border-b border-neutral-100/80">
+                  <span className="text-neutral-500 font-medium">Transmission</span>
+                  <span className="font-semibold text-neutral-900 capitalize">{vehicle.transmission || '—'}</span>
+                </div>
+
+                {/* Fuel Type */}
+                <div className="flex items-center justify-between py-1.5">
+                  <span className="text-neutral-500 font-medium">Fuel Type</span>
+                  <span className="font-semibold text-neutral-900 capitalize">{vehicle.fuel_type || '—'}</span>
+                </div>
+
+              </div>
+            </div>
 
           </div>
+
         </div>
 
       </div>
