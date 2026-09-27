@@ -106,6 +106,16 @@ export default function Navbar() {
             >
               CONTACT US
             </Link>
+
+            {/* iPad / Tablet Menu Button (Visible when links are hidden, < lg) */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gray-100/90 hover:bg-gray-200 text-gray-800 transition-all active:scale-95 cursor-pointer ml-1"
+              aria-label="Open Navigation Menu"
+            >
+              <Menu size={20} strokeWidth={2.5} />
+            </button>
           </div>
         </div>
       </div>
@@ -146,9 +156,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Modern Slide-in Side Drawer (Mobile Only) */}
+      {/* Modern Slide-in Side Drawer (Mobile & Tablet) */}
       <div 
-        className={`md:hidden fixed inset-0 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`lg:hidden fixed inset-0 z-[100] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
