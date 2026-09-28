@@ -20,17 +20,7 @@ export default function ShopClient({ initialVehicles }: { initialVehicles: any[]
   // Sync with Supabase client-side and localStorage
   useEffect(() => {
     const fetchVehicles = async () => {
-      let combined: any[] = [];
-
-      // 1. Local storage cache
-      try {
-        const local = JSON.parse(localStorage.getItem('nexca_local_vehicles') || '[]');
-        if (Array.isArray(local)) {
-          combined = [...local.filter((v: any) => v.status === 'available' || !v.status)];
-        }
-      } catch (e) {}
-
-      // 2. Client-side fetch from Supabase
+      // 1. Client-side fetch from Supabase (Source of Truth)
       try {
         const { data, error } = await supabase
           .from('vehicles')
@@ -38,17 +28,25 @@ export default function ShopClient({ initialVehicles }: { initialVehicles: any[]
           .eq('status', 'available')
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
-          const supabaseIds = new Set(data.map((v: any) => v.id));
-          const localOnly = combined.filter((v: any) => !supabaseIds.has(v.id));
-          combined = [...data, ...localOnly];
+        if (!error && Array.isArray(data)) {
+          setVehicles(data);
+          try {
+            localStorage.setItem('nexca_local_vehicles', JSON.stringify(data));
+          } catch (e) {}
+          setLoading(false);
+          return;
         }
       } catch (err) {
         console.warn("Client shop fetch error:", err);
-      } finally {
-        if (combined.length > 0) {
-          setVehicles(combined);
+      }
+
+      // 2. Fallback to localStorage only if offline/network error
+      try {
+        const local = JSON.parse(localStorage.getItem('nexca_local_vehicles') || '[]');
+        if (Array.isArray(local) && local.length > 0) {
+          setVehicles(local.filter((v: any) => v.status === 'available' || !v.status));
         }
+      } catch (e) {} finally {
         setLoading(false);
       }
     };

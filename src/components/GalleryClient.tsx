@@ -110,41 +110,34 @@ export default function GalleryClient({ initialItems }: { initialItems: GalleryC
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  // Sync gallery items from Supabase client and localStorage
+  // Sync gallery items with Supabase (source of truth) and purge deleted items from localStorage
   useEffect(() => {
     const fetchGallery = async () => {
-      let combined: GalleryCardData[] = [];
-
-      // 1. Try localStorage
-      try {
-        const local = JSON.parse(localStorage.getItem('nexca_local_gallery') || '[]');
-        if (Array.isArray(local) && local.length > 0) {
-          combined = [...local];
-        }
-      } catch (e) {}
-
-      // 2. Client-side fetch from Supabase
+      // 1. Client-side fetch from Supabase
       try {
         const { data, error } = await supabase
           .from('gallery_items')
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
-          const supabaseIds = new Set(data.map((item: any) => item.id));
-          const localOnly = combined.filter((item: any) => !supabaseIds.has(item.id));
-          combined = [...data, ...localOnly];
+        if (!error && Array.isArray(data)) {
+          setItems(data);
           try {
-            localStorage.setItem('nexca_local_gallery', JSON.stringify(combined));
+            localStorage.setItem('nexca_local_gallery', JSON.stringify(data));
           } catch (e) {}
+          return;
         }
       } catch (err) {
         console.warn("Client gallery fetch warning:", err);
-      } finally {
-        if (combined.length > 0) {
-          setItems(combined);
-        }
       }
+
+      // 2. Fallback to localStorage ONLY if network request failed completely
+      try {
+        const local = JSON.parse(localStorage.getItem('nexca_local_gallery') || '[]');
+        if (Array.isArray(local) && local.length > 0) {
+          setItems(local);
+        }
+      } catch (e) {}
     };
 
     fetchGallery();
