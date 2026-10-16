@@ -31,16 +31,16 @@ export default async function HomePage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Floating Rounded Hero Container (Bloomora / sltraveler style) */}
-      <div className="max-w-[1440px] mx-auto px-2.5 sm:px-4 md:px-5 pt-[72px] sm:pt-[80px] pb-4 sm:pb-6">
+      <div className="max-w-[1440px] mx-auto px-2.5 sm:px-4 md:px-5 pt-[72px] sm:pt-[80px] pb-6 sm:pb-8 md:pb-12">
         <div 
-          className="relative min-h-[380px] sm:min-h-[440px] md:h-[calc(100vh-100px)] md:min-h-[680px] lg:min-h-[720px] max-h-[820px] rounded-[24px] sm:rounded-[36px] md:rounded-[42px] flex items-center bg-cover bg-center overflow-hidden"
+          className="relative min-h-[360px] sm:min-h-[420px] md:h-[calc(100vh-170px)] md:min-h-[540px] lg:min-h-[580px] max-h-[700px] rounded-[24px] sm:rounded-[36px] md:rounded-[42px] flex items-center bg-cover bg-center overflow-hidden"
           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         >
           {/* Soft Gradient Overlay for image clarity */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-transparent"></div>
           
           {/* Hero Content (Left-aligned) */}
-          <div className="relative z-10 px-6 sm:px-12 md:px-16 py-14 sm:py-18 md:py-24 max-w-3xl text-left">
+          <div className="relative z-10 px-6 sm:px-12 md:px-16 py-10 sm:py-14 md:py-16 max-w-3xl text-left">
             <h1 className="text-3xl sm:text-5xl md:text-[56px] font-extrabold text-white tracking-tight leading-[1.08] mb-6 drop-shadow-lg">
               Discover Excellence <br /> with Nexca
             </h1>
