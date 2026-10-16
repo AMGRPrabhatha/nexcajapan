@@ -17,10 +17,10 @@ export default async function HomePage() {
       .limit(4);
 
     const timeoutPromise = new Promise<{ data: any[] | null; error: any }>((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), 50)
+      setTimeout(() => reject(new Error('timeout')), 5000)
     );
 
-    const res = await Promise.race([fetchPromise, timeoutPromise]);
+    const res: any = await Promise.race([fetchPromise, timeoutPromise]);
     if (res?.data) {
       featuredVehicles = res.data;
     }
@@ -33,7 +33,7 @@ export default async function HomePage() {
       {/* Floating Rounded Hero Container (Bloomora / sltraveler style) */}
       <div className="max-w-[1440px] mx-auto px-2.5 sm:px-4 md:px-5 pt-[72px] sm:pt-[80px] pb-6 sm:pb-8 md:pb-12">
         <div 
-          className="relative min-h-[360px] sm:min-h-[420px] md:h-[calc(100vh-170px)] md:min-h-[540px] lg:min-h-[580px] max-h-[700px] rounded-[24px] sm:rounded-[36px] md:rounded-[42px] flex items-center bg-cover bg-center overflow-hidden"
+          className="relative min-h-[420px] sm:min-h-[500px] md:h-[calc(100vh-120px)] md:min-h-[620px] lg:min-h-[680px] max-h-[820px] rounded-[24px] sm:rounded-[36px] md:rounded-[42px] flex items-center bg-cover bg-center overflow-hidden"
           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         >
           {/* Soft Gradient Overlay for image clarity */}

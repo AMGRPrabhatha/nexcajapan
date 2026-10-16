@@ -42,11 +42,11 @@ export default function Navbar() {
             prefetch={true}
             className="flex items-center gap-3 group cursor-pointer"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center bg-[#0b101e] flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center bg-[#050B1A] flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
               <img 
                 src="/logo.PNG" 
                 alt="Nexca Logo" 
-                className="w-full h-full object-cover scale-110" 
+                className="w-full h-full object-contain p-0.5" 
               />
             </div>
             <span className="text-[17px] font-extrabold text-gray-900 tracking-tight hidden sm:block">
@@ -130,11 +130,11 @@ export default function Navbar() {
             prefetch={true}
             className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white/95 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_0_rgba(0,0,0,0.1),inset_0_1px_0_0_rgba(255,255,255,0.8)] transition-all duration-300 cursor-pointer"
           >
-            <div className="w-[30px] h-[30px] rounded-full overflow-hidden flex items-center justify-center bg-[#0b101e] border border-black/5 flex-shrink-0 shadow-sm">
+            <div className="w-[30px] h-[30px] rounded-full overflow-hidden flex items-center justify-center bg-[#050B1A] border border-black/5 flex-shrink-0 shadow-sm">
               <img 
                 src="/logo.PNG" 
                 alt="Nexca Logo" 
-                className="w-full h-full object-cover scale-110" 
+                className="w-full h-full object-contain p-0.5" 
               />
             </div>
             <span className="text-[16px] font-extrabold text-gray-900 tracking-tight pr-0.5">
@@ -177,8 +177,8 @@ export default function Navbar() {
           {/* Drawer Header */}
           <div className="flex items-center justify-between p-6">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full overflow-hidden bg-[#0b101e] flex items-center justify-center">
-                <img src="/logo.PNG" alt="Nexca Logo" className="w-full h-full object-cover scale-110" />
+              <div className="w-7 h-7 rounded-full overflow-hidden bg-[#050B1A] flex items-center justify-center">
+                <img src="/logo.PNG" alt="Nexca Logo" className="w-full h-full object-contain p-0.5" />
               </div>
               <span className="text-lg font-extrabold text-gray-900 tracking-tight">Nexca</span>
             </Link>
